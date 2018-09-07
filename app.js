@@ -40,11 +40,20 @@
 	  break;
 
   },
-  ler_formulario: function(form,area){
-    //TODO
+  ler_formulario: function(form,area,parser){
+    let texto = parser(form)
+    this.set_texto(area,texto)
+
+    return true
   },
   ler_evolucao: function(evolucao){
-    //TODO
+    textos = EvoluParser(evolucao)
+    
+    //Ordem Ã paciente,prescricao,exames,obs
+    textos.forEach(function(texto){
+      
+    
+    });
   }
  }
  
