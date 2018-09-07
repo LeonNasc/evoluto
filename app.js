@@ -22,7 +22,23 @@
   texto_exames: "",
   texto_obs: "",
   set_texto : function(area, texto){
-    //TODO
+    switch(area):
+	  case 'paciente':
+	    texto_paciente = texto
+	  break;
+	  case 'prescricao':
+	    texto_prescricao= texto
+	  break;
+	  case 'exames':
+	    texto_exames = texto
+	  break;
+	  case 'obs':
+	    texto_obs = texto
+	  break;
+	  default:
+	  console.log('Nao ha onde inserir')
+	  break;
+
   },
   ler_formulario: function(form,area){
     //TODO
@@ -34,6 +50,14 @@
  
  const EvoluParser = {
    decifrar_evolução:function(evolu){
+     //TODO
+   }
+   parse_paciente(form){
+     //TODO
+   }
+   parse_prescricao(form){
+     //TODO
+   }parse_exames(form){
      //TODO
    }
  }
