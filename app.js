@@ -40,29 +40,40 @@
 	  break;
 
   },
+//O parser È um dos parsers em EvoluParser, adequado para cada area
   ler_formulario: function(form,area,parser){
-    let texto = parser(form)
-    this.set_texto(area,texto)
+    let texto = parser(form);
+    this.set_texto(area,texto);
 
     return true
   },
   ler_evolucao: function(evolucao){
-    textos = EvoluParser(evolucao)
+    textos = EvoluParser.decifrar_evolucao(evolucao);
     
     //Ordem √ paciente,prescricao,exames,obs
     textos.forEach(function(texto){
-      
-    
+	//Cada texto È uma tupla
+	Leitor.set_texto(area,texto.texto); 
     });
   }
  }
  
  const EvoluParser = {
-   decifrar_evolu√ß√£o:function(evolu){
+   decifrar_evolucao:function(evolu){
      //TODO
    }
    parse_paciente(form){
      //TODO
+     let internacao = form.intern.value;
+     //Comorbidades pode ser um conjunto de checkboxes, ou um csv
+     let comorbidades = form.comorb.value.split(",");
+     //Alergias È uma lista contendo todas as alergias do paciente, separadas por virgula
+     let alergias = form.alergias.value.split(",");
+     let peso = form.peso.value;
+
+     let texto = internacao + "\n" + comorbidades + "\n" + alergias + "\n" + peso
+
+     return Formatador.formatar_texto(texto,txt_formatadores.formatador_paciente)
    }
    parse_prescricao(form){
      //TODO
@@ -70,6 +81,7 @@
      //TODO
    }
  }
+
  
  const Escritor = {
    escrever: function(texto){
@@ -77,17 +89,10 @@
    }
  }
  
- var Formatador = {
-  texto_paciente_f : "" ,
-  texto_prescricao_f: "",
-  texto_exames_f: "",
-  texto_obs_f: "",
-  set_texto : function(area, texto){
-    //TODO
-  },
-  formatar_texto: function(area,texto,formatador){
+ var Formatador ={
+  formatar_texto: function(texto,formatador){
     //Formatador √© fun√ß√£o
-    //TODO
+    return formatador(texto);
   } 
  }
  
