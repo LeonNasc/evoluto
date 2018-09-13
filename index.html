@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Evoluto</title>
+		<link href="./css/estilos.css" rel="stylesheet"/>
+	</head>
+
+<body>
+	<main>
+		<form id="paciente" onsubmit="Leitor.ler_formulario(this,this.id,EvoluParser.parse_paciente);return false">
+			<label>Motivo de internação</label>
+			<input type="text" name="intern"/>
+			
+			<label>Comorbidades</label>
+			<input type="text" name="comorb" placeholder="Insira as comorbidades separadas por vírgula"/>
+
+			<label>Alergias</label>
+			<input type="text" name="alergias" placeholder="Insira as alergias separadas por vírgula"/>
+			<label>Peso</label>
+			<input type="texto" name="peso"/>
+			
+			<input type="submit" value="enviar"/>
+		</form>
+		<form id="prescr"  onsubmit="Leitor.ler_formulario(this,this.id,EvoluParser.parse_prescricao);return false">
+			<label>Itens da prescrição</label>
+			<!--Se marcados, adicionam inputs com a profilaxia em uso e seus dias planejados-->
+			<input id="atb" type="checkbox" onchange="alert(this.name +'---'+ this.checked )" name="atb_check" value="Antibiotico"> 
+			<label for="atb">Antibiotico</label>
+			<input  id="ulcer" type="checkbox" onchange="change_function()" name="ulcer_check" value="Úlcera Gástrica"> 
+			<label for="ulcer">Profilaxia de úlcera gástrica</label>
+			<input  id="tev" type="checkbox" onchange="change_function()" name="tev_check" value="TEV"> 
+			<label for="tev">Profilaxia de TEV</label>
+			<input  id="analgesia" type="checkbox" onchange="change_function()" name="analgesia_check"value="Analgesia"> 
+			<label for="analgesia">Analgesia</label>
+			<input type="checkbox" onchange="change_function()" name="np_check"value="Não-padrão"> 
+			<label for="np">Não-Padrão</label>
+		</form>
+	</main>
+<script src="./app.js"></script>
+</body>
+
+</html>

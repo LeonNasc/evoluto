@@ -15,37 +15,38 @@
  * opt.1) Pode incluir uma calculadora de Clearance
  * opt.2) Pode marcar medicamentos que necessitem de ajuste (dado uma lista destes)
  */ 
- 
+
  var Leitor = {
   texto_paciente : "" ,
   texto_prescricao: "",
   texto_exames: "",
   texto_obs: "",
   set_texto : function(area, texto){
-    switch(area):
+    switch(area){
 	  case 'paciente':
-	    texto_paciente = texto
+	    this.texto_paciente = texto
 	  break;
 	  case 'prescricao':
-	    texto_prescricao= texto
+	     this.texto_prescricao= texto
 	  break;
 	  case 'exames':
-	    texto_exames = texto
+	     this.texto_exames = texto
 	  break;
 	  case 'obs':
-	    texto_obs = texto
+	     this.texto_obs = texto
 	  break;
 	  default:
 	  console.log('Nao ha onde inserir')
 	  break;
 
+	}
   },
 //O parser é um dos parsers em EvoluParser, adequado para cada area
   ler_formulario: function(form,area,parser){
     let texto = parser(form);
     this.set_texto(area,texto);
-
-    return true
+    console.log(this.texto_paciente)
+    return this;
   },
   ler_evolucao: function(evolucao){
     textos = EvoluParser.decifrar_evolucao(evolucao);
@@ -61,24 +62,62 @@
  const EvoluParser = {
    decifrar_evolucao:function(evolu){
      //TODO
-   }
+   },
+   limpar_exames_copiados: function(exames){
+
+	// Em geral os exames vêm com um modelo de sigla seguido de valor, o que dá pra limpar com um regex
+	// dependendo do modo como o médico colocou
+	return Leitor.set_texto('exames', exames);
+   },
    parse_paciente(form){
-     //TODO
-     let internacao = form.intern.value;
-     //Comorbidades pode ser um conjunto de checkboxes, ou um csv
-     let comorbidades = form.comorb.value.split(",");
-     //Alergias é uma lista contendo todas as alergias do paciente, separadas por virgula
-     let alergias = form.alergias.value.split(",");
-     let peso = form.peso.value;
 
-     let texto = internacao + "\n" + comorbidades + "\n" + alergias + "\n" + peso
+   	let internacao = form.intern.value;
 
-     return Formatador.formatar_texto(texto,txt_formatadores.formatador_paciente)
-   }
+	//Comorbidades pode ser um conjunto de checkboxes, ou um csv
+	let comorbidades = form.comorb.value.split(",");
+
+       //Alergias é uma lista contendo todas as alergias do paciente, separadas por virgula
+ 	let alergias = form.alergias.value.split(",");
+
+	let peso = form.peso.value;
+
+	texto = {"internacao": internacao ,"comorb": comorbidades , "alergias": alergias ,"peso": peso};
+
+	return Formatador.formatar_texto(texto,txt_formatadores.formatador_paciente)
+   },
    parse_prescricao(form){
-     //TODO
-   }parse_exames(form){
-     //TODO
+	
+	//Deve vir como lista de atbs + dose + dia
+	let atb = form.atb.value;
+
+	let ulcer = form.ulcer.value;
+
+	//Deve vir como um checkbox (Compressor, Clexane(dose),Deambulação, Anticoagulado(anticoagulante))
+	let tev = form.tev.value;
+
+	//Deve vir como 'item, item, item'
+	let np = form.np.value.split(',');
+
+	//Pode vir como 'item + item', ou 'item, item'
+	let analgesia = form.analgesia.split(/\+|,/);
+	
+	let texto = [atb, ulcer, tev, analgesia, np];
+
+	return Formatador.formatar_texto(texto,txt_formatadores.formatador_prescricao)
+		
+   },
+   parse_exames(form){
+
+	let texto =  '';
+
+	//Cada exame é um item de uma lista
+	form.forEach(function(exame){
+		texto += `${exame.nome} : ${exame.valor} /`
+	});
+
+	texto = texto.slice(0,-1);
+	
+	return Formatador.formatar_texto(texto,txt_formatadores.formatador_exame)
    }
  }
 
@@ -98,8 +137,15 @@
  
  const txt_formatadores = {
    formatador_paciente : function(texto){
-     //TODO
-   },
+	let str = `Pela Farmácia Clínica
+
+Motivo de internação: ${texto.internacao}
+Comorbidades: ${texto.comorb.join(",").toUpperCase()}
+Alergias: ${texto.alergias.join(",").toUpperCase()}
+Peso: ${texto.peso} kg`
+
+	return str;
+},
    formatador_prescricao : function(texto){
      //TODO
    },
