@@ -24,19 +24,34 @@
 		<form id="prescr"  onsubmit="Leitor.ler_formulario(this,this.id,EvoluParser.parse_prescricao);return false">
 			<label>Itens da prescrição</label>
 			<!--Se marcados, adicionam inputs com a profilaxia em uso e seus dias planejados-->
-			<input id="atb" type="checkbox" onchange="alert(this.name +'---'+ this.checked )" name="atb_check" value="Antibiotico"> 
+			<div id="atb">
+			<input type="checkbox" onchange="alert(this.name +'---'+ this.checked )" name="atb_check" value="Antibiotico"> 
 			<label for="atb">Antibiotico</label>
-			<input  id="ulcer" type="checkbox" onchange="change_function()" name="ulcer_check" value="Úlcera Gástrica"> 
+			</div>
+
+			<div id="ulcer">
+			<input type="checkbox" onchange="novo_form(multi_item_form, this.name)" name="ulcer_check" value="Úlcera Gástrica"> 
 			<label for="ulcer">Profilaxia de úlcera gástrica</label>
-			<input  id="tev" type="checkbox" onchange="change_function()" name="tev_check" value="TEV"> 
+			</div>
+
+			<div id="tev">
+			<input type="checkbox" onchange="novo_form(multi_item_form, this.name)" name="tev_check" value="TEV"> 
 			<label for="tev">Profilaxia de TEV</label>
-			<input  id="analgesia" type="checkbox" onchange="change_function()" name="analgesia_check"value="Analgesia"> 
+			</div>
+
+			<div id="analgesia">
+			<input type="checkbox" onchange="novo_form(multi_item_form, this.name)"name="analgesia_check"value="Analgesia"> 
 			<label for="analgesia">Analgesia</label>
-			<input type="checkbox" onchange="change_function()" name="np_check"value="Não-padrão"> 
+			</div>
+
+			<div id="np">
+			<input type="checkbox" onchange="novo_form(multi_item_form, this.name)" name="np_check"value="Não-padrão"> 
 			<label for="np">Não-Padrão</label>
+			</div>
 		</form>
 	</main>
+
+<script src="./frontend.js"></script>
 <script src="./app.js"></script>
 </body>
-
 </html>

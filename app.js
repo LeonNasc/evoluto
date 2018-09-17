@@ -88,20 +88,20 @@
    parse_prescricao(form){
 	
 	//Deve vir como lista de atbs + dose + dia
-	let atb = form.atb.value;
+	let atb = form.atb.value.split(/\+|,/);
+	let atb_dias = form.atb_dias.value;
+  
+	let ulcer = form.ulcer.value.split(/\+|,/);
 
-	let ulcer = form.ulcer.value;
-
-	//Deve vir como um checkbox (Compressor, Clexane(dose),Deambulação, Anticoagulado(anticoagulante))
-	let tev = form.tev.value;
+	let tev = form.tev.value.split(/\+|,/);
 
 	//Deve vir como 'item, item, item'
-	let np = form.np.value.split(',');
+	let np = form.np.value.split(/\+|,/);
 
 	//Pode vir como 'item + item', ou 'item, item'
 	let analgesia = form.analgesia.split(/\+|,/);
 	
-	let texto = [atb, ulcer, tev, analgesia, np];
+	let texto = [atb,atb_dias, ulcer, tev, analgesia, np];
 
 	return Formatador.formatar_texto(texto,txt_formatadores.formatador_prescricao)
 		
