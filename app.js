@@ -86,24 +86,53 @@
 	return Formatador.formatar_texto(texto,txt_formatadores.formatador_paciente)
    },
    parse_prescricao(form){
-	
+
 	//Deve vir como lista de atbs + dose + dia
-	let atb = form.atb.value.split(/\+|,/);
-	let atb_dias = form.atb_dias.value;
-  
-	let ulcer = form.ulcer.value.split(/\+|,/);
+	if('atb' in form){	
+	    atb = form.atb.value.split(/\+|,/);
+            atb_dias = form.atb_dias.value.split(/\+|,/);
+	}
+	else{
+	 atb = 'Não Prescrito'
+	 atb_dias = 0
+	}
 
-	let tev = form.tev.value.split(/\+|,/);
+ 	if('ulcer' in form){ 
+	  ulcer = form.ulcer.value.split(/\+|,/);
+	}
+	else{
+	  ulcer  = 'Não Prescrito'
+	}
 
+	if('tev' in form){
+          tev = form.tev.value.split(/\+|,/);
+	}
+	else{
+          tev = 'Não prescrito';
+	}
+
+	if('np' in form){
 	//Deve vir como 'item, item, item'
-	let np = form.np.value.split(/\+|,/);
-
+          np = form.np.value.split(/\+|,/);
+	}
+	else{
+          np  = 'Não prescrito';
+	}
+	if('analgesia' in form){
 	//Pode vir como 'item + item', ou 'item, item'
-	let analgesia = form.analgesia.split(/\+|,/);
-	
-	let texto = [atb,atb_dias, ulcer, tev, analgesia, np];
+	  analgesia = form.analgesia.value.split(/\+|,/);
+	}
+	else{
+	  analgesia  = 'Não prescrito';
+	}
 
-	return Formatador.formatar_texto(texto,txt_formatadores.formatador_prescricao)
+	let texto = {'atb': {'medicamentos':atb,'duracao':atb_dias},
+		     'ulcer': ulcer,
+		     'tev': tev,	
+		     'analgesia': analgesia,
+		     'np': np};
+
+	return Formatador.formatar_texto(texto,txt_formatadores.formatador_prescricao);
 		
    },
    parse_exames(form){
@@ -147,7 +176,26 @@ Peso: ${texto.peso} kg`
 	return str;
 },
    formatador_prescricao : function(texto){
-     //TODO
+	var texto_atb = '';	
+	with(texto.atb){
+		for(i=0;i<medicamentos.length;i++){
+		  texto_atb +=  `+ ${medicamentos[i]} (D${duracao[i]})`	
+		}
+	}
+	for(var entrada in texto){	
+		if(typeof texto[entrada] == 'object' && entrada != 'atb'){
+			texto[entrada] = texto[entrada].join(" + ")
+		}
+	};
+	let str = `Análise da prescrição em ${Date.now()}
+Antibioticoterapia: ${texto_atb.slice(1)}
+Profilaxia de úlcera gástrica: ${texto.ulcer}
+Profilaxia de TEV: ${texto.tev}
+Analgesia: ${texto.analgesia}
+Não-Padrão: ${texto.np}
+
+`
+	return str;
    },
    formatador_exames : function(texto){
      //TODO
