@@ -30,4 +30,10 @@ function atb_form(form_type){
 	
 	return multi_item_form(form_type) + label_d +  duracao;
 }
+function make_another_atb(form_type,count){
 
+	return atb_form('atb').replace(/atb/g,`$a_${count}`) 
+}
+function delete_form_item(formitem){
+	return formitem = ''
+}
